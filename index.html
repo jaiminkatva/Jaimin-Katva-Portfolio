@@ -1328,12 +1328,17 @@
 
             <div class="col-lg-8 mt-5 mt-lg-0">
               <form
-                action="forms/contact.php"
-                method="post"
-                role="form"
+                action="https://api.web3forms.com/submit"
+                method="POST"
                 class="php-email-form"
+                id="contact-form"
               >
                 <div class="row">
+                  <input
+                    type="hidden"
+                    name="access_key"
+                    value="f9e917e7-903d-4128-a647-6eee2904c33c"
+                  />
                   <div class="col-md-6 form-group">
                     <input
                       type="text"
@@ -1374,11 +1379,21 @@
                     required
                   ></textarea>
                 </div>
+                <input
+                  type="checkbox"
+                  name="botcheck"
+                  class="hidden"
+                  style="display: none"
+                />
                 <div class="my-3">
                   <div class="loading">Loading</div>
                   <div class="error-message"></div>
-                  <div class="sent-message">
-                    Your message has been sent. Thank you!
+                  <div
+                    class="sent-message"
+                    id="success-message"
+                    style="display: none; font-weight: bold"
+                  >
+                    ✅ Your message has been sent successfully. Thank you!
                   </div>
                 </div>
                 <div class="text-center">
@@ -1451,6 +1466,35 @@
       class="back-to-top d-flex align-items-center justify-content-center"
       ><i class="bi bi-arrow-up-short"></i
     ></a>
+
+    <script>
+      document
+        .getElementById("contact-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+          var form = this;
+
+          // Simulate form submission
+          fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                let successMessage = document.getElementById("success-message");
+                successMessage.style.display = "block"; // Show message
+                form.reset(); // Clear form after success
+
+                // Hide the message after 5 seconds
+                setTimeout(() => {
+                  successMessage.style.display = "none";
+                }, 3000);
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+    </script>
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
